@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, UploadFile, HTTPException
-from utils.pdf_loader import extract_text_from_pdf
-from services.gemini_extract import extract_contract_info
+from app.utils.pdf_loader import extract_text_from_pdf
+from app.services.gemini_extract import extract_contract_info, fix_json
 
 router = APIRouter()
 
@@ -16,8 +16,11 @@ async def analyze_pdf(file: UploadFile = File(...)):
 
     # Extraction texte
     text = await extract_text_from_pdf(file.file)
-
+    
     # LLM
     result = await extract_contract_info(text)
 
-    return {"analysis_result": result}
+    cleaned_json = fix_json(result) 
+    
+    return {"analysis_result": cleaned_json}
+

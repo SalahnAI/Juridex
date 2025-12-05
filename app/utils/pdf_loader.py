@@ -1,6 +1,6 @@
 import pdfplumber
 import pytesseract
-from core.logger import logger
+from app.core.logger import logger
 
 async def extract_text_from_pdf(file_obj):
     text = ""
