@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from app.api.routes import router
 
 app = FastAPI(
-    title="LexiScan AI PRO",
+    title="Juridex",
     version="1.0.0"
 )
 
