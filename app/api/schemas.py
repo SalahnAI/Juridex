@@ -12,7 +12,7 @@ class ContractExtraction(BaseModel):
     resume: str
 
     # Auto-cleaning
-    @field_validator("*", pre=True)
+    @field_validator("*")
     def clean_strings(cls, v):
         if isinstance(v, str):
             return v.strip()
