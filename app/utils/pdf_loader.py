@@ -1,18 +1,17 @@
-import pdfplumber
 import pytesseract
-from app.core.logger import logger
+from pdf2image import convert_from_bytes
+from PIL import Image
+import io
 
-async def extract_text_from_pdf(file_obj):
-    text = ""
+async def extract_text_from_pdf(file_data):
+    pdf_bytes = file_data.read()
 
-    with pdfplumber.open(file_obj) as pdf:
-        for page in pdf.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text
-            else:
-                logger.info("Page scannée détectée → OCR")
-                img = page.to_image(resolution=300).original
-                text += pytesseract.image_to_string(img)
+    images = convert_from_bytes(pdf_bytes)
 
-    return text
+    full_text = ""
+
+    for img in images:
+        text = pytesseract.image_to_string(img, lang="eng")
+        full_text += text + "\n"
+
+    return full_text
